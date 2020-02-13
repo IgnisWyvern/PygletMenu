@@ -98,8 +98,8 @@ class Menu:
             self.on_click = on_click
 
         def check_click(self, cur_x: int, cur_y: int):
-            if(cur_x > self.x and cur_x < self.x + self.width and
-               cur_y > self.y and cur_y < self.y + self.height):
+            if(self.x < cur_x < self.x + self.width and
+               self.y < cur_y < self.y + self.height):
                 self.on_click()
 
 
