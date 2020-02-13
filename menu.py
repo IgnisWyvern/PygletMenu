@@ -1,5 +1,5 @@
 import pyglet
-from typing import Callable, Tuple, List
+from typing import Callable, Tuple, List, Dict
 
 
 class Menu:
@@ -8,43 +8,45 @@ class Menu:
         self.fore = pyglet.graphics.OrderedGroup(2)
         self.mid = pyglet.graphics.OrderedGroup(1)
         self.back = pyglet.graphics.OrderedGroup(0)
-        self.button_list: List[Menu.Button] = []
-        self.text_list: List[Menu.TextTag] = []
+
+        self.button_dict: Dict[str, Menu.Button] = {}
+        self.texttag_dict: Dict[str, Menu.TextTag] = {}
 
         self.vertex_list = self.batch.add(4, pyglet.gl.GL_QUADS, self.back,
                                           ("v2i", (0, 0, 0, height, width,
                                            height, width, 0)),
                                           ("c3B", (colour_tuple * 4)))
 
-    def add_button(self, text: str, x: int, y: int, width: int, height: int,
-                   on_click: Callable,
+    def add_button(self, name: str, text: str, x: int, y: int, width: int,
+                   height: int, on_click: Callable,
                    colour_tuple: Tuple[int, int, int] = (0, 255, 255),
                    font_name: str = "Times New Roman",
                    font_size: int = 100):
-        self.button_list.append(self.Button(text, x, y, width,
-                                            height, on_click,
-                                            colour_tuple=colour_tuple,
-                                            fore_group=self.fore,
-                                            mid_group=self.mid,
-                                            batch=self.batch,
-                                            font_name=font_name,
-                                            font_size=font_size))
+        self.button_dict[name] = self.Button(text, x, y, width,
+                                             height, on_click,
+                                             colour_tuple=colour_tuple,
+                                             fore_group=self.fore,
+                                             mid_group=self.mid,
+                                             batch=self.batch,
+                                             font_name=font_name,
+                                             font_size=font_size)
 
-    def add_texttag(self, text: str, x: int, y: int, width: int, height: int,
+    def add_texttag(self, name: str, text: str, x: int, y: int, width: int,
+                    height: int,
                     colour_tuple: Tuple[int, int, int] = (0, 255, 255),
                     font_name: str = "Times New Roman",
                     font_size: int = 100):
-        self.text_list.append(self.TextTag(text, x, y, width,
-                                           height, colour_tuple, self.batch,
-                                           self.fore, self.mid,
-                                           font_name, font_size))
+        self.texttag_dict[name] = self.TextTag(text, x, y, width,
+                                               height, colour_tuple,
+                                               self.batch, self.fore, self.mid,
+                                               font_name, font_size)
 
     def draw(self):
         """draw all the elements of the menu"""
         self.batch.draw()
 
     def on_click(self, x, y):
-        for button in self.button_list:
+        for button in self.button_dict.values():
             button.check_click(x, y)
 
     class TextTag:
@@ -106,9 +108,9 @@ class Menu:
 def main():
     window = pyglet.window.Window()
     menu = Menu(window.width, window.height)
-    menu.add_button("hi", 0, 0, 200, 200, lambda: print("hi"))
-    menu.add_button("bye", 200, 200, 200, 200, lambda: print("bye"))
-    menu.add_texttag("la", 400, 400, 100, 100)
+    menu.add_button("he","hi", 0, 0, 200, 200, lambda: print("hi"))
+    menu.add_button("hi","bye", 200, 200, 200, 200, lambda: print("bye"))
+    menu.add_texttag("hl","la", 400, 400, 100, 100)
 
     @window.event
     def on_mouse_press(x, y, button, modifiers):
@@ -119,7 +121,7 @@ def main():
     def on_draw():
         window.clear()
         menu.draw()
-        menu.button_list[0].draw()
+
     pyglet.app.run()
 
 
