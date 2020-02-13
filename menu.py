@@ -3,7 +3,11 @@ from typing import Callable, Tuple, List, Dict
 
 
 class Menu:
-    def __init__(self, width, height, colour_tuple: Tuple[int, int, int] = (0, 0, 0)):
+    """
+    A collection of buttons and text labels
+    """
+    def __init__(self, width, height, 
+                 colour_tuple: Tuple[int, int, int] = (0, 0, 0)):
         self.batch = pyglet.graphics.Batch()
         self.fore = pyglet.graphics.OrderedGroup(2)
         self.mid = pyglet.graphics.OrderedGroup(1)
@@ -22,30 +26,42 @@ class Menu:
                    colour_tuple: Tuple[int, int, int] = (0, 255, 255),
                    font_name: str = "Times New Roman",
                    font_size: int = 100):
-        self.button_dict[name] = self.Button(text, x, y, width,
-                                             height, on_click,
-                                             colour_tuple=colour_tuple,
-                                             fore_group=self.fore,
-                                             mid_group=self.mid,
-                                             batch=self.batch,
-                                             font_name=font_name,
-                                             font_size=font_size)
+        if name not in self.button_dict:
+            self.button_dict[name] = self.Button(text, x, y, width,
+                                                 height, on_click,
+                                                 colour_tuple=colour_tuple,
+                                                 fore_group=self.fore,
+                                                 mid_group=self.mid,
+                                                 batch=self.batch,
+                                                 font_name=font_name,
+                                                 font_size=font_size)
+            return self.button_dict[name]
+        else:
+            return None
 
     def add_texttag(self, name: str, text: str, x: int, y: int, width: int,
                     height: int,
                     colour_tuple: Tuple[int, int, int] = (0, 255, 255),
                     font_name: str = "Times New Roman",
                     font_size: int = 100):
-        self.texttag_dict[name] = self.TextTag(text, x, y, width,
-                                               height, colour_tuple,
-                                               self.batch, self.fore, self.mid,
-                                               font_name, font_size)
+        if name not in self.texttag_dict:
+            self.texttag_dict[name] = self.TextTag(text, x, y, width,
+                                                   height, colour_tuple,
+                                                   self.batch, self.fore,
+                                                   self.mid, font_name,
+                                                   font_size)
+            return self.texttag_dict[name]
+        else:
+            return None
 
     def draw(self):
         """draw all the elements of the menu"""
         self.batch.draw()
 
     def on_click(self, x, y):
+        """
+        Check all the buttons for if the cursor was in their domain
+        """
         for button in self.button_dict.values():
             button.check_click(x, y)
 
@@ -64,10 +80,10 @@ class Menu:
 
             if isinstance(batch, pyglet.graphics.Batch):
                 self.vertex_list = batch.add(4, pyglet.gl.GL_QUADS, mid_group,
-                                        ("v2i", (x, y, x + width, y, x + width,
-                                                 y + height,
-                                                 x, y + height)),
-                                        ("c3B", (colour_tuple * 4)))
+                                             ("v2i", (x, y, x + width, y, x +
+                                              width, y + height, x,
+                                              y + height)), 
+                                             ("c3B", (colour_tuple * 4)))
             else:
                 self.vertex_list = pyglet.graphics.vertex_list(4,
                                             ("v2i", (x, y, x + width, y, x +
@@ -108,10 +124,9 @@ class Menu:
 def main():
     window = pyglet.window.Window()
     menu = Menu(window.width, window.height)
-    menu.add_button("he","hi", 0, 0, 200, 200, lambda: print("hi"))
-    menu.add_button("hi","bye", 200, 200, 200, 200, lambda: print("bye"))
-    menu.add_texttag("hl","la", 400, 400, 100, 100)
-
+    menu.add_button("he", "hi", 0, 0, 200, 200, lambda: print("hi"))
+    menu.add_button("hi", "bye", 200, 200, 200, 200, lambda: print("bye"))
+    menu.add_texttag("hl", "la", 400, 400, 100, 100)
     @window.event
     def on_mouse_press(x, y, button, modifiers):
         if button == pyglet.window.mouse.LEFT:
