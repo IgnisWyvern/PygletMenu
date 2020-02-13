@@ -1,5 +1,5 @@
 import pyglet
-from typing import Callable, Tuple, List, Dict
+from typing import Callable, Tuple, Dict
 
 
 class Menu:
@@ -36,8 +36,7 @@ class Menu:
                                                  font_name=font_name,
                                                  font_size=font_size)
             return self.button_dict[name]
-        else:
-            return None
+        return None
 
     def add_texttag(self, name: str, text: str, x: int, y: int, width: int,
                     height: int,
@@ -51,8 +50,7 @@ class Menu:
                                                    self.mid, font_name,
                                                    font_size)
             return self.texttag_dict[name]
-        else:
-            return None
+        return None
 
     def draw(self):
         """draw all the elements of the menu"""
