@@ -6,8 +6,13 @@ class Menu:
     """
     A collection of buttons and text labels
     """
-    def __init__(self, width, height, 
+    def __init__(self, x: int, y: int, width: int, height: int,
                  colour_tuple: Tuple[int, int, int] = (0, 0, 0)):
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
         self.batch = pyglet.graphics.Batch()
         self.fore = pyglet.graphics.OrderedGroup(2)
         self.mid = pyglet.graphics.OrderedGroup(1)
@@ -17,8 +22,9 @@ class Menu:
         self.texttag_dict: Dict[str, Menu.TextTag] = {}
 
         self.vertex_list = self.batch.add(4, pyglet.gl.GL_QUADS, self.back,
-                                          ("v2i", (0, 0, 0, height, width,
-                                           height, width, 0)),
+                                          ("v2i", (x, y, x, y + height,
+                                           x + width, y + height, x + width,
+                                           y)),
                                           ("c3B", (colour_tuple * 4)))
 
     def add_button(self, name: str, text: str, x: int, y: int, width: int,

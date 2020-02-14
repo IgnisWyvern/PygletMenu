@@ -1,5 +1,5 @@
 import menu
-from typing import Dict
+from typing import Dict, Optional
 
 
 class Menu_Manager:
@@ -12,9 +12,19 @@ class Menu_Manager:
         self.width = width
         self.height = height
 
-        self.menu_pointer = None
+        self.menu_pointer: Optional[menu.Menu] = None
         self.menu_dict: Dict[str, menu.Menu] = {}
 
     def draw(self):
-        if self.menu_pointer is menu.Menu:
+        if isinstance(self.menu_pointer, menu.Menu):
             self.menu_pointer.draw()
+
+    def change_menu(self, menu_name: str) -> bool:
+        if menu_name == "None":
+            self.menu_pointer = None
+            return True
+        temp_pointer = self.menu_dict.get(menu_name)
+        if temp_pointer is not None:
+            self.menu_pointer = temp_pointer
+            return True
+        return False
