@@ -28,3 +28,7 @@ class Menu_Manager:
             self.menu_pointer = temp_pointer
             return True
         return False
+
+
+if __name__ == "__main__":
+    pass
