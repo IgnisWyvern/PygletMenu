@@ -154,8 +154,8 @@ class Menu:
             self.label.x = x + width//2
             self.label.y = y + height//2
             # add font size changing
-            self.label.font_size = min(self.width, self.height) * min(mul_x /2,
-                                                                      mul_y)
+            self.label.font_size = min(self.width,
+                                       self.height) * min(mul_x / 2, mul_y)
 
     class Button(TextTag):
         def __init__(self, text: str, x: int, y: int, width: int, height: int,
